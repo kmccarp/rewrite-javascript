@@ -353,7 +353,7 @@ public interface JS extends J {
     /**
      * A JavaScript `=>` is similar to a Java lambda, but additionally contains annotations, modifiers, type arguments.
      * The ArrowFunction prevents J.Lambda recipes from transforming the LST because an ArrowFunction
-     * may not be transformed in the same way as a J.Lambda.
+     * may not be transformed in the samuel e way as a J.Lambda.
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
