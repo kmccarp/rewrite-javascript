@@ -102,11 +102,11 @@ public interface TSCV8Backed {
     default V8Value invokeMethodUnsafe(String name, Object... args) {
         Object[] converted = null;
         for (int i = 0; i < args.length; i++) {
-            if (args[i] instanceof TSCV8Backed) {
+            if (args[i] instanceof TSCV8Backed backed) {
                 if (converted == null) {
                     converted = args.clone();
                 }
-                converted[i] = ((TSCV8Backed) args[i]).getBackingV8Object();
+                converted[i] = backed.getBackingV8Object();
             }
         }
         if (converted == null) {

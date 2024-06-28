@@ -120,7 +120,7 @@ public class TypeScriptTypeMapping implements JavaTypeMapping<TSCNode> {
 
         String fqn = signatureBuilder.classSignature(node);
         JavaType fq = typeCache.get(fqn);
-        JavaType.Class clazz = (JavaType.Class) (fq instanceof JavaType.Parameterized ? ((JavaType.Parameterized) fq).getType() : fq);
+        JavaType.Class clazz = (JavaType.Class) (fq instanceof JavaType.Parameterized p ? p.getType() : fq);
         if (clazz == null) {
             TSCSyntaxKind syntaxKind = node.syntaxKind();
             JavaType.FullyQualified.Kind kind;
@@ -162,7 +162,7 @@ public class TypeScriptTypeMapping implements JavaTypeMapping<TSCNode> {
                         if (superTypes.size() > 1) {
                             implementMe(node.syntaxKind());
                         } else {
-                            supertype = (JavaType.FullyQualified) type(superTypes.get(0));
+                            supertype = (JavaType.FullyQualified) type(superTypes.getFirst());
                         }
                     } else {
                         implementMe(node.syntaxKind());
@@ -517,7 +517,7 @@ public class TypeScriptTypeMapping implements JavaTypeMapping<TSCNode> {
             List<TSCNode> declarations = symbol.getDeclarations();
             if (declarations != null && !declarations.isEmpty()) {
                 if (declarations.size() == 1) {
-                    return type(declarations.get(0));
+                    return type(declarations.getFirst());
                 } else {
                     return TsType.MergedInterface;
                 }
@@ -596,8 +596,8 @@ public class TypeScriptTypeMapping implements JavaTypeMapping<TSCNode> {
             classType = type(node.getNodeProperty("expression"));
         }
 
-        if (classType instanceof JavaType.Parameterized) {
-            classType = ((JavaType.Parameterized) classType).getType();
+        if (classType instanceof JavaType.Parameterized parameterized) {
+            classType = parameterized.getType();
         }
 
         List<TSCNode> typeArguments = node.getOptionalNodeListProperty("typeArguments");

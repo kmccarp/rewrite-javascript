@@ -41,14 +41,14 @@ public abstract class TSCV8ValueHolder implements AutoCloseable {
             return value;
         }
 
-        if (value instanceof IV8Value) {
+        if (value instanceof IV8Value v8Value) {
             try {
                 //noinspection unchecked
-                value = (T) ((IV8Value) value).toClone();
+                value = (T) v8Value.toClone();
             } catch (JavetException e) {
                 throw new RuntimeException(e);
             }
-            this.v8Values.add((IV8Value) value);
+            this.v8Values.add(v8Value);
         } else {
             this.otherValues.add(value);
         }

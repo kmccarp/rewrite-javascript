@@ -299,7 +299,7 @@ public class TypeScriptSignatureBuilder implements JavaTypeSignatureBuilder {
             List<TSCNode> declarations = symbol.getDeclarations();
             if (declarations != null && !declarations.isEmpty()) {
                 if (declarations.size() == 1) {
-                    return signature(declarations.get(0));
+                    return signature(declarations.getFirst());
                 } else {
                     return TsType.MergedInterface.getFullyQualifiedName();
                 }

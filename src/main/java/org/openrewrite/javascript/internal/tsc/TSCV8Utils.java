@@ -35,7 +35,7 @@ public class TSCV8Utils {
 
     public static void assertValidIdentifier(String name) {
         if (!IDENTIFIER_PATTERN.matcher(name).matches()) {
-            throw new IllegalArgumentException(String.format("not a valid JS identifier: `%s`", name));
+            throw new IllegalArgumentException("not a valid JS identifier: `%s`".formatted(name));
         }
     }
 
@@ -56,7 +56,7 @@ public class TSCV8Utils {
         }
 
         String outerArgs = "{" + String.join(",", varNames) + "}";
-        String outerCode = String.format("(%s) => {return %s;}", outerArgs, innerCode);
+        String outerCode = "(%s) => {return %s;}".formatted(outerArgs, innerCode);
         try (
                 V8ValueFunction outerFn = runtime.createV8ValueFunction(outerCode);
                 V8Value innerFnObject = outerFn.call(null, variables)

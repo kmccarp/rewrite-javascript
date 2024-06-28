@@ -39,9 +39,9 @@ public class TSCMeta {
                 }
 
                 ((V8ValueMap) syntaxKinds).forEach((V8Value keyV8, V8Value valueV8) -> {
-                    if (keyV8 instanceof V8ValueString && valueV8 instanceof V8ValueInteger) {
-                        int code = ((V8ValueInteger) valueV8).getValue();
-                        String name = ((V8ValueString) keyV8).getValue();
+                    if (keyV8 instanceof V8ValueString string && valueV8 instanceof V8ValueInteger integer) {
+                        int code = integer.getValue();
+                        String name = string.getValue();
                         result.syntaxKindsByCode.put(code, name);
                         result.syntaxKindsByName.put(name, code);
                     }

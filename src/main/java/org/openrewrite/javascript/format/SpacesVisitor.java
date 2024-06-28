@@ -165,7 +165,7 @@ public class SpacesVisitor<P> extends JavaScriptIsoVisitor<P> {
         if (m.getBody() != null) {
             m = m.withBody(spaceBefore(m.getBody(), style.getBeforeLeftBrace().getFunctionLeftBrace()));
         }
-        if (!m.getParameters().isEmpty() && !(m.getParameters().iterator().next() instanceof J.Empty)) {
+        if (!m.getParameters().isEmpty() && !(m.getParameters().getFirst() instanceof J.Empty)) {
             final int paramsSize = m.getParameters().size();
             boolean useSpace = style.getWithin().getFunctionDeclarationParentheses();
             m = m.getPadding().withParameters(
@@ -222,7 +222,7 @@ public class SpacesVisitor<P> extends JavaScriptIsoVisitor<P> {
     public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, P p) {
         J.MethodInvocation m = super.visitMethodInvocation(method, p);
         m = m.getPadding().withArguments(spaceBefore(m.getPadding().getArguments(), style.getBeforeParentheses().getFunctionCallParentheses()));
-        if (!m.getArguments().isEmpty() && !(m.getArguments().iterator().next() instanceof J.Empty)) {
+        if (!m.getArguments().isEmpty() && !(m.getArguments().getFirst() instanceof J.Empty)) {
             final int argsSize = m.getArguments().size();
             boolean useSpace = style.getWithin().getFunctionCallParentheses();
             m = m.getPadding().withArguments(

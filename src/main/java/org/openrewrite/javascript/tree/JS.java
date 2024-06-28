@@ -595,8 +595,8 @@ public interface JS extends J {
             J j = v.visit(getExpression(), p);
             if (j instanceof ExpressionStatement) {
                 return j;
-            } else if (j instanceof Expression) {
-                return withExpression((Expression) j);
+            } else if (j instanceof Expression expression1) {
+                return withExpression(expression1);
             }
             return j;
         }
@@ -1102,8 +1102,8 @@ public interface JS extends J {
             for (J.Modifier modifier : modifiers) {
                 allAnnotations.addAll(modifier.getAnnotations());
             }
-            if (typeExpression != null && typeExpression instanceof J.AnnotatedType) {
-                allAnnotations.addAll(((J.AnnotatedType) typeExpression).getAnnotations());
+            if (typeExpression != null && typeExpression instanceof J.AnnotatedType type) {
+                allAnnotations.addAll(type.getAnnotations());
             }
             return allAnnotations;
         }
@@ -1311,8 +1311,8 @@ public interface JS extends J {
             J j = v.visit(getStatement(), p);
             if (j instanceof StatementExpression) {
                 return j;
-            } else if (j instanceof Statement) {
-                return withStatement((Statement) j);
+            } else if (j instanceof Statement statement1) {
+                return withStatement(statement1);
             }
             return j;
         }

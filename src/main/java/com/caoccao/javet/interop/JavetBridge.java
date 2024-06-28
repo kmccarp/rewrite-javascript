@@ -79,10 +79,10 @@ public final class JavetBridge {
                         System.err.print("** still open: ");
                         if (valueV8 instanceof V8ValueFunction) {
                             System.err.print(valueV8);
-                        } else if (valueV8 instanceof V8ValueObject) {
-                            try (V8Value constructor = ((V8ValueObject) valueV8).get("constructor")) {
-                                if (constructor instanceof V8ValueObject) {
-                                    String name = ((V8ValueObject) constructor).getPrimitive("name");
+                        } else if (valueV8 instanceof V8ValueObject object) {
+                            try (V8Value constructor = object.get("constructor")) {
+                                if (constructor instanceof V8ValueObject object) {
+                                    String name = object.getPrimitive("name");
                                     if (name.equals("NodeObject")) {
                                         System.err.print("[" + name + ":" + TSCSyntaxKind.fromCode(((V8ValueObject) valueV8).getInteger("kind")) + "]");
                                     } else {

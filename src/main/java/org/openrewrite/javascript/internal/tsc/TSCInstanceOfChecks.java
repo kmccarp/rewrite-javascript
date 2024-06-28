@@ -74,12 +74,13 @@ public class TSCInstanceOfChecks extends TSCV8ValueHolder {
             }
 
             @Language("typescript")
-            String code = "" +
-                    "(arg) => {\n" +
-                    "  for (let i = 0; i < ctors.length; i++) {\n" +
-                    "    if (arg.constructor === ctors[i]) return i;\n" +
-                    "  }\n" +
-                    "}";
+            String code = """
+                    (arg) => {
+                      for (let i = 0; i < ctors.length; i++) {
+                        if (arg.constructor === ctors[i]) return i;
+                      }
+                    }\
+                    """;
 
             outerVars.set("ctors", constructors);
             try (V8ValueFunction constructorOrdinalFunctionV8 = TSCV8Utils.makeFunction(runtimeV8, code, outerVars)) {

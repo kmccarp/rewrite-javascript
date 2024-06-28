@@ -118,8 +118,8 @@ public class TSCNode implements TSCV8Backed {
 
     @Override
     public String toString() {
-        return String.format(
-                "Node(%s@[%d,%d); «%s»)",
+        return 
+                "Node(%s@[%d,%d); «%s»)".formatted(
                 syntaxKind().name(),
                 getStart(),
                 getEnd(),
@@ -186,8 +186,8 @@ public class TSCNode implements TSCV8Backed {
      */
     public @Nullable TSCNode findNodeAtPosition(int position) {
         if (!containsPosition(position)) {
-            throw new IllegalArgumentException(String.format(
-                    "Attempt to find node at position %d, but this %s node only covers [%d, %d).",
+            throw new IllegalArgumentException(
+                    "Attempt to find node at position %d, but this %s node only covers [%d, %d).".formatted(
                     position,
                     this.syntaxKind(),
                     this.getStart(),
@@ -270,8 +270,8 @@ public class TSCNode implements TSCV8Backed {
     }
 
     public TSCNode.SourceFile assertSourceFile() {
-        if (this instanceof TSCNode.SourceFile) {
-            return (SourceFile) this;
+        if (this instanceof TSCNode.SourceFile file) {
+            return file;
         } else {
             throw new IllegalStateException("not a source file: " + syntaxKind());
         }
@@ -282,8 +282,8 @@ public class TSCNode implements TSCV8Backed {
     }
 
     public TypeNode assertTypeNode() {
-        if (this instanceof TypeNode) {
-            return (TypeNode) this;
+        if (this instanceof TypeNode node) {
+            return node;
         }
         throw new IllegalStateException("expected a TypeNode, but this is an ordinary Node");
     }

@@ -266,7 +266,7 @@ public class V8InteropTests {
               assertNotNull(typeParams);
               assertEquals(1, typeParams.size());
 
-              TSCType typeParam = typeParams.get(0);
+              TSCType typeParam = typeParams.getFirst();
               assertNotNull(typeParam);
 
               TSCType typeParamConstraint = typeParam.getConstraint();
@@ -299,7 +299,7 @@ public class V8InteropTests {
               assertNotNull(typeParams);
               assertEquals(2, typeParams.size());
 
-              TSCType typeParam1 = typeParams.get(0);
+              TSCType typeParam1 = typeParams.getFirst();
               TSCType typeParam2 = typeParams.get(1);
               assertNotNull(typeParam1);
               assertNotNull(typeParam2);
@@ -316,7 +316,7 @@ public class V8InteropTests {
               List<TSCType> constraintTypeArgs = typeParam2Constraint.assertTypeReference().getTypeArguments();
               assertEquals(3, constraintTypeArgs.size());
               // Used type variables, i.e. `string, T1, number`
-              assertSame(globalStringType, constraintTypeArgs.get(0));
+              assertSame(globalStringType, constraintTypeArgs.getFirst());
               assertSame(typeParam1, constraintTypeArgs.get(1));
               assertSame(globalNumberType, constraintTypeArgs.get(2));
           }

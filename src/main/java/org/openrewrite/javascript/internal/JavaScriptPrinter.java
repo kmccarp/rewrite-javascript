@@ -392,7 +392,7 @@ public class JavaScriptPrinter<P> extends JavaScriptVisitor<PrintOutputCapture<P
         @Override
         public J visitAnnotation(J.Annotation annotation, PrintOutputCapture<P> p) {
             beforeSyntax(annotation, Space.Location.ANNOTATION_PREFIX, p);
-            if (!annotation.getMarkers().findFirst(Keyword.class).isPresent()) {
+            if (annotation.getMarkers().findFirst(Keyword.class).isEmpty()) {
                 p.append("@");
             }
             visit(annotation.getAnnotationType(), p);
@@ -647,7 +647,7 @@ public class JavaScriptPrinter<P> extends JavaScriptVisitor<PrintOutputCapture<P
                 p.append("new");
             }
             visit(newClass.getClazz(), p);
-            if (!newClass.getPadding().getArguments().getMarkers().findFirst(OmitParentheses.class).isPresent()) {
+            if (newClass.getPadding().getArguments().getMarkers().findFirst(OmitParentheses.class).isEmpty()) {
                 visitContainer(objectLiteral ? "{" : "(", newClass.getPadding().getArguments(), JContainer.Location.NEW_CLASS_ARGUMENTS, ",", objectLiteral ? "}" : ")", p);
             }
             visit(newClass.getBody(), p);
@@ -744,9 +744,9 @@ public class JavaScriptPrinter<P> extends JavaScriptVisitor<PrintOutputCapture<P
 
         @Override
         public <M extends Marker> M visitMarker(Marker marker, PrintOutputCapture<P> p) {
-            if (marker instanceof TrailingComma) {
+            if (marker instanceof TrailingComma comma) {
                 p.append(",");
-                visitSpace(((TrailingComma) marker).getSuffix(), Space.Location.LANGUAGE_EXTENSION, p);
+                visitSpace(comma.getSuffix(), Space.Location.LANGUAGE_EXTENSION, p);
             } else if (marker instanceof Semicolon) {
                 p.append(';');
             }

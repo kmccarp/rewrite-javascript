@@ -42,24 +42,24 @@ public final class TSCConversions {
     };
 
     public static final TSCConversion<Boolean> BOOLEAN = (context, value) -> {
-        if (value instanceof V8ValueBoolean) {
-            return ((V8ValueBoolean) value).getValue();
+        if (value instanceof V8ValueBoolean boolean1) {
+            return boolean1.getValue();
         }
         throw new IllegalArgumentException("expected V8 boolean");
     };
 
     public static final TSCConversion<Integer> INTEGER = (context, value) -> {
-        if (value instanceof V8ValueInteger) {
-            return ((V8ValueInteger) value).getValue();
+        if (value instanceof V8ValueInteger integer) {
+            return integer.getValue();
         }
         throw new IllegalArgumentException("expected V8 integer");
     };
 
     public static final TSCConversion<Long> LONG = (context, value) -> {
-        if (value instanceof V8ValueLong) {
-            return ((V8ValueLong) value).getValue();
-        } else if (value instanceof V8ValueInteger) {
-            return ((V8ValueInteger) value).getValue().longValue();
+        if (value instanceof V8ValueLong long1) {
+            return long1.getValue();
+        } else if (value instanceof V8ValueInteger integer) {
+            return integer.getValue().longValue();
         }
         throw new IllegalArgumentException("expected V8 long or integer");
     };
@@ -99,8 +99,8 @@ public final class TSCConversions {
         }
         autoConversionDepth.set(initialDepth + 1);
         try {
-            if (value instanceof V8ValuePrimitive) {
-                return ((V8ValuePrimitive<?>) value).getValue();
+            if (value instanceof V8ValuePrimitive<?> primitive) {
+                return primitive.getValue();
             }
 
             if (value instanceof V8ValueObject) {

@@ -230,14 +230,12 @@ public class TsTreePrinter {
                                 .append(UNVISITED_PREFIX)
                                 .append(element instanceof String ? element : element.getClass().getSimpleName());
 
-                        if (element instanceof JRightPadded) {
-                            JRightPadded rp = (JRightPadded) element;
+                        if (element instanceof JRightPadded<?> rp) {
                             newLine.append(" | ");
                             newLine.append(" after = ").append(printSpace(rp.getAfter()));
                         }
 
-                        if (element instanceof JLeftPadded) {
-                            JLeftPadded lp = (JLeftPadded) element;
+                        if (element instanceof JLeftPadded<?> lp) {
                             newLine.append(" | ");
                             newLine.append(" before = ").append(printSpace(lp.getBefore()));
                         }
@@ -288,36 +286,32 @@ public class TsTreePrinter {
 
     private static String printType(Tree tree) {
         StringBuilder sb = new StringBuilder();
-        if (tree instanceof TypedTree) {
-            JavaType type = ((TypedTree) tree).getType();
+        if (tree instanceof TypedTree typedTree) {
+            JavaType type = typedTree.getType();
             if (type != null && !(type instanceof JavaType.Unknown)) {
                 sb.append(type);
             }
         }
 
-        if (tree instanceof J.MethodInvocation) {
-            J.MethodInvocation m = (J.MethodInvocation) tree;
+        if (tree instanceof J.MethodInvocation m) {
             if (m.getMethodType() != null) {
                 sb.append(" MethodType = ").append(m.getMethodType());
             }
         }
 
-        if (tree instanceof J.MethodDeclaration) {
-            J.MethodDeclaration m = (J.MethodDeclaration) tree;
+        if (tree instanceof J.MethodDeclaration m) {
             if (m.getMethodType() != null) {
                 sb.append(" MethodType = ").append(m.getMethodType());
             }
         }
 
-        if (tree instanceof J.VariableDeclarations.NamedVariable) {
-            J.VariableDeclarations.NamedVariable v = (J.VariableDeclarations.NamedVariable) tree;
+        if (tree instanceof J.VariableDeclarations.NamedVariable v) {
             if (v.getVariableType() != null) {
                 sb.append(" VariableType = ").append(v.getVariableType());
             }
         }
 
-        if (tree instanceof J.Identifier) {
-            J.Identifier id = (J.Identifier) tree;
+        if (tree instanceof J.Identifier id) {
             if (id.getFieldType() != null) {
                 sb.append(" FieldType = ").append(id.getFieldType());
             }
@@ -349,8 +343,8 @@ public class TsTreePrinter {
             return "";
         }
 
-        if (tree instanceof J.Literal) {
-            String s = ((J.Literal) tree).getValueSource();
+        if (tree instanceof J.Literal literal) {
+            String s = literal.getValueSource();
             return s != null ? s : "";
         }
 

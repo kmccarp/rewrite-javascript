@@ -95,8 +95,8 @@ public class TypeScriptParserVisitor {
             }
 
             if (visited != null) {
-                if (!(visited instanceof Statement) && visited instanceof Expression) {
-                    visited = new JS.ExpressionStatement(randomId(), (Expression) visited);
+                if (!(visited instanceof Statement) && visited instanceof Expression expression) {
+                    visited = new JS.ExpressionStatement(randomId(), expression);
                 }
                 statements.add(maybeSemicolon((Statement) visited));
             }
@@ -129,8 +129,8 @@ public class TypeScriptParserVisitor {
         Expression left = (Expression) visitNode(node.getNodeProperty("left"));
         Space before = sourceBefore(TSCSyntaxKind.EqualsToken);
         J j = visitNode(node.getNodeProperty("right"));
-        if (!(j instanceof Expression) && j instanceof Statement) {
-            j = new JS.StatementExpression(randomId(), (Statement) j);
+        if (!(j instanceof Expression) && j instanceof Statement statement) {
+            j = new JS.StatementExpression(randomId(), statement);
         }
         return new J.Assignment(
                 randomId(),
@@ -678,7 +678,7 @@ public class TypeScriptParserVisitor {
                 if (TSCSyntaxKind.fromCode(tscNode.getIntProperty("token")) == TSCSyntaxKind.ExtendsKeyword) {
                     List<TSCNode> types = tscNode.getNodeListProperty("types");
                     assert types.size() == 1;
-                    extendings = padLeft(sourceBefore(TSCSyntaxKind.ExtendsKeyword), (TypeTree) visitNode(types.get(0)));
+                    extendings = padLeft(sourceBefore(TSCSyntaxKind.ExtendsKeyword), (TypeTree) visitNode(types.getFirst()));
                 } else {
                     implementMe(tscNode);
                 }
@@ -1464,7 +1464,7 @@ public class TypeScriptParserVisitor {
         } else if (opKind == TSCSyntaxKind.ExclamationEqualsEqualsToken) {
             op = padLeft(sourceBefore(TSCSyntaxKind.ExclamationEqualsEqualsToken), JS.JsBinary.Type.IdentityNotEquals);
         } else {
-            throw new IllegalArgumentException(String.format("Binary operator kind <%s> is not supported.", opKind));
+            throw new IllegalArgumentException("Binary operator kind <%s> is not supported.".formatted(opKind));
         }
 
         Expression right = (Expression) visitNode(node.getNodeProperty("right"));
@@ -1758,7 +1758,7 @@ public class TypeScriptParserVisitor {
                 emptyList() : declarationList.getNodeListProperty("declarations");
 
         TypeTree typeTree = null;
-        TSCNode bindingNode = declarations.get(0);
+        TSCNode bindingNode = declarations.getFirst();
         TSCNode objectBindingPattern = bindingNode.getNodeProperty("name");
         implementMe(bindingNode, "exclamationToken");
         implementMe(bindingNode, "type");
@@ -1776,8 +1776,8 @@ public class TypeScriptParserVisitor {
             if (propertyNameNode != null) {
                 J j = visitNode(propertyNameNode);
                 J.Identifier name = null;
-                if (j instanceof J.Identifier) {
-                    name = (J.Identifier) j;
+                if (j instanceof J.Identifier identifier) {
+                    name = identifier;
                 } else {
                     implementMe(propertyNameNode);
                 }
@@ -1787,8 +1787,8 @@ public class TypeScriptParserVisitor {
             TSCNode nameNode = binding.getNodeProperty("name");
             J j = visitNode(nameNode);
             J.Identifier name = null;
-            if (j instanceof J.Identifier) {
-                name = (J.Identifier) j;
+            if (j instanceof J.Identifier identifier) {
+                name = identifier;
             } else {
                 implementMe(nameNode);
             }
@@ -1881,8 +1881,8 @@ public class TypeScriptParserVisitor {
         Space varArg = varArgNode != null ? sourceBefore(TSCSyntaxKind.DotDotDotToken) : null;
         J j = visitNode(node.getNodeProperty("name"));
         J.Identifier name = null;
-        if (j instanceof J.Identifier) {
-            name = (J.Identifier) j;
+        if (j instanceof J.Identifier identifier) {
+            name = identifier;
         } else {
             implementMe(node);
         }
@@ -1955,13 +1955,13 @@ public class TypeScriptParserVisitor {
         Space variablePrefix = whitespace();
         J j = visitNode(node.getOptionalNodeProperty("name"));
         J.Identifier name = null;
-        if (j instanceof J.Identifier) {
-            name = (J.Identifier) j;
-        } else if (j instanceof J.Literal) {
+        if (j instanceof J.Identifier identifier) {
+            name = identifier;
+        } else if (j instanceof J.Literal literal) {
             // FIXME: covers code like `'Content-Type': undefined`.
             //  The identifier might be `Content-Type` and only use the `'` to enable `-` in the name.
             //  If the identifier is `Content-Type`, then use the value instead of the value source and add a marker to represent the `'`.
-            name = convertToIdentifier(j.getPrefix(), ((J.Literal) j).getValueSource());
+            name = convertToIdentifier(j.getPrefix(), literal.getValueSource());
         } else {
             implementMe(node);
         }
@@ -2049,8 +2049,8 @@ public class TypeScriptParserVisitor {
         TSCNode expressionNode = node.getOptionalNodeProperty("expression");
         if (expressionNode != null) {
             J j = visitNode(expressionNode);
-            expression = !(j instanceof Expression) && j instanceof Statement ?
-                    new JS.StatementExpression(randomId(), (Statement) j) : (Expression) j;
+            expression = !(j instanceof Expression) && j instanceof Statement s ?
+                    new JS.StatementExpression(randomId(), s) : (Expression) j;
         }
         return new J.Return(
                 randomId(),
@@ -2103,8 +2103,8 @@ public class TypeScriptParserVisitor {
         TSCNode templateExpression;
         if (node.syntaxKind() == TSCSyntaxKind.TaggedTemplateExpression) {
             J j = visitNode(node.getNodeProperty("tag"));
-            tag = padRight(!(j instanceof Expression) && j instanceof Statement ?
-                    new JS.StatementExpression(randomId(), (Statement) j) : (Expression) j, whitespace());
+            tag = padRight(!(j instanceof Expression) && j instanceof Statement s ?
+                    new JS.StatementExpression(randomId(), s) : (Expression) j, whitespace());
             if (node.hasProperty("questionDotToken")) {
                 markers = markers.addIfAbsent(new PostFixOperator(randomId(), sourceBefore(TSCSyntaxKind.QuestionDotToken), PostFixOperator.Operator.QuestionDot));
             }
@@ -2202,8 +2202,8 @@ public class TypeScriptParserVisitor {
                 randomId(),
                 before,
                 Markers.EMPTY,
-                padRight(!(j instanceof Expression) && j instanceof Statement ?
-                        new JS.StatementExpression(randomId(), (Statement) j) : (Expression) j, sourceBefore(TSCSyntaxKind.CloseParenToken))
+                padRight(!(j instanceof Expression) && j instanceof Statement s ?
+                        new JS.StatementExpression(randomId(), s) : (Expression) j, sourceBefore(TSCSyntaxKind.CloseParenToken))
         );
         TSCNode caseBlock = node.getNodeProperty("caseBlock");
         return new J.Switch(
@@ -2293,8 +2293,8 @@ public class TypeScriptParserVisitor {
 
         Space beforeEquals = sourceBefore(TSCSyntaxKind.EqualsToken);
         J j = visitNode(node.getNodeProperty("type"));
-        JLeftPadded<Expression> initializer = padLeft(beforeEquals, !(j instanceof Expression) && j instanceof Statement ?
-                new JS.StatementExpression(randomId(), (Statement) j) : (Expression) j);
+        JLeftPadded<Expression> initializer = padLeft(beforeEquals, !(j instanceof Expression) && j instanceof Statement s ?
+                new JS.StatementExpression(randomId(), s) : (Expression) j);
 
         return new JS.TypeDeclaration(
                 randomId(),
@@ -2548,8 +2548,8 @@ public class TypeScriptParserVisitor {
         Space variablePrefix = whitespace();
         J j = visitNode(node.getNodeProperty("name"));
         J.Identifier name = null;
-        if (j instanceof J.Identifier) {
-            name = (J.Identifier) j;
+        if (j instanceof J.Identifier identifier) {
+            name = identifier;
             if (!trailing.isEmpty()) {
                 name = name.withAnnotations(trailing);
             }
@@ -2630,8 +2630,8 @@ public class TypeScriptParserVisitor {
                 Space variablePrefix = whitespace();
                 J j = visitNode(declaration.getNodeProperty("name"));
                 J.Identifier name = null;
-                if (j instanceof J.Identifier) {
-                    name = (J.Identifier) j;
+                if (j instanceof J.Identifier identifier) {
+                    name = identifier;
                 } else {
                     implementMe(declaration);
                 }
@@ -2729,8 +2729,8 @@ public class TypeScriptParserVisitor {
             Space variablePrefix = whitespace();
             J j = visitNode(declaration.getNodeProperty("name"));
             J.Identifier name = null;
-            if (j instanceof J.Identifier) {
-                name = (J.Identifier) j;
+            if (j instanceof J.Identifier identifier) {
+                name = identifier;
             } else {
                 implementMe(declaration);
             }
@@ -2754,10 +2754,10 @@ public class TypeScriptParserVisitor {
             if (init != null) {
                 Space before = sourceBefore(TSCSyntaxKind.EqualsToken);
                 J element = visitNode(init);
-                if (!(element instanceof Expression) && element instanceof Statement) {
-                    initializer = padLeft(before, new JS.StatementExpression(randomId(), (Statement) element));
-                } else if (element instanceof Expression) {
-                    initializer = padLeft(before, (Expression) element);
+                if (!(element instanceof Expression) && element instanceof Statement statement) {
+                    initializer = padLeft(before, new JS.StatementExpression(randomId(), statement));
+                } else if (element instanceof Expression expression) {
+                    initializer = padLeft(before, expression);
                 } else {
                     implementMe(init);
                 }
@@ -2811,8 +2811,8 @@ public class TypeScriptParserVisitor {
             markers = markers.add(new Asterisk(randomId(), sourceBefore(TSCSyntaxKind.AsteriskToken)));
         }
         J j = visitNode(node.getNodeProperty("expression"));
-        Expression expr = (!(j instanceof Expression) && j instanceof Statement) ?
-                new JS.StatementExpression(randomId(), (Statement) j) : (Expression) j;
+        Expression expr = (!(j instanceof Expression) && j instanceof Statement s) ?
+                new JS.StatementExpression(randomId(), s) : (Expression) j;
         return new J.Yield(
                 randomId(),
                 prefix,
@@ -3164,7 +3164,7 @@ public class TypeScriptParserVisitor {
     private void consumeToken(TSCSyntaxKind kind) {
         TSCSyntaxKind actual = scan();
         if (kind != actual) {
-            throw new IllegalStateException(String.format("expected kind '%s'; found '%s' at position %d", kind, actual, cursorContext.scannerTokenStart()));
+            throw new IllegalStateException("expected kind '%s'; found '%s' at position %d".formatted(kind, actual, cursorContext.scannerTokenStart()));
         }
     }
 
@@ -3521,8 +3521,8 @@ public class TypeScriptParserVisitor {
 
     @SuppressWarnings("unchecked")
     private <J2 extends J> J2 convertToExpression(J j) {
-        if (j instanceof Statement && !(j instanceof Expression)) {
-            j = new JS.StatementExpression(randomId(), (Statement) j);
+        if (j instanceof Statement statement && !(j instanceof Expression)) {
+            j = new JS.StatementExpression(randomId(), statement);
         }
         return (J2) j;
     }
@@ -3549,7 +3549,7 @@ public class TypeScriptParserVisitor {
                         }
                         initialSpace.append(lastToken());
                     } else {
-                        Comment lastComment = comments.get(comments.size() - 1);
+                        Comment lastComment = comments.getLast();
                         comments.set(comments.size() - 1, lastComment.withSuffix(lastComment.getSuffix() + lastToken()));
                     }
                     break;

@@ -45,9 +45,11 @@ public class UseCaseFallThrough extends Recipe {
 
     @Override
     public String getDescription() {
-        return "The comma `,` operator evaluates each of its operands (from left to right) and returns the value of the last operand." +
-                "The logical OR `||` operator only evaluates the first argument." +
-                "This recipe replaces the comma and logical OR operator with fall-through cases in switch statements.";
+        return """
+                The comma `,` operator evaluates each of its operands (from left to right) and returns the value of the last operand.\
+                The logical OR `||` operator only evaluates the first argument.\
+                This recipe replaces the comma and logical OR operator with fall-through cases in switch statements.\
+                """;
     }
 
     @Override
@@ -71,13 +73,12 @@ public class UseCaseFallThrough extends Recipe {
                 }
 
                 s = s.withCases(s.getCases().withStatements(ListUtils.flatMap(s.getCases().getStatements(), it -> {
-                    if (it instanceof J.Case && changeCondition(((J.Case) it).getExpressions())) {
-                        J.Case c = (J.Case) it;
+                    if (it instanceof J.Case c && changeCondition(c.getExpressions())) {
                         final List<Statement> converted = convertToFallThrough(c);
                         return ListUtils.map(converted, (i, st) -> {
-                            if (st instanceof J.Case) {
+                            if (st instanceof J.Case case1) {
                                 if (i == converted.size() - 1) {
-                                    return ((J.Case) st).getPadding().withStatements(c.getPadding().getStatements());
+                                    return case1.getPadding().withStatements(c.getPadding().getStatements());
                                 }
                             }
                             return st;

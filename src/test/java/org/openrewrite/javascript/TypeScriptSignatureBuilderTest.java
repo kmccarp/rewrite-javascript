@@ -215,13 +215,13 @@ class TypeScriptSignatureBuilderTest {
                 .findFirst()
                 .orElseThrow()
                 .getNodeListProperty("parameters")
-                .get(0)
+                .getFirst()
                 .getNodeProperty("type")));
     }
 
     String lastClassTypeParameterSignature(TSCNode node) {
-        List<TSCNode> typeParams = node.getNodeListProperty("statements").get(0).getNodeListProperty("typeParameters");
-        return Objects.requireNonNull(signatureBuilder().signature(typeParams.get(typeParams.size() - 1)));
+        List<TSCNode> typeParams = node.getNodeListProperty("statements").getFirst().getNodeListProperty("typeParameters");
+        return Objects.requireNonNull(signatureBuilder().signature(typeParams.getLast()));
     }
 
     private void assertMethodSignature(String target, String expectedMethodParameterSignature, String expectedMethodSignature) {
