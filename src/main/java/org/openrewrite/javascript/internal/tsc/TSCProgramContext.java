@@ -24,7 +24,6 @@ import lombok.Value;
 import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class TSCProgramContext extends TSCV8ValueHolder {
     private final V8ValueObject program;
@@ -88,8 +87,8 @@ public class TSCProgramContext extends TSCV8ValueHolder {
                     typeChecker,
                     createScanner,
                     getOpenRewriteId,
-                    Paths.get(pathPrefixes.getString("app")),
-                    Paths.get(pathPrefixes.getString("lib"))
+                    Path.of(pathPrefixes.getString("app")),
+                    Path.of(pathPrefixes.getString("lib"))
             );
         } catch (JavetException e) {
             throw new RuntimeException(e);
@@ -156,7 +155,7 @@ public class TSCProgramContext extends TSCV8ValueHolder {
     }
 
     protected CompilerBridgeSourceInfo getBridgeSourceInfo(TSCNode.SourceFile sourceFile) {
-        Path rawPath = Paths.get(sourceFile.getOriginalFileName());
+        Path rawPath = Path.of(sourceFile.getOriginalFileName());
         Path sourceKindRoot;
         CompilerBridgeSourceKind sourceKind;
         if (rawPath.startsWith(this.compilerAppPath)) {

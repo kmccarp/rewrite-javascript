@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -144,7 +143,7 @@ public class TSCRuntime implements AutoCloseable {
     }
 
     public void parseSingleSource(@Language("typescript") String sourceText, String filename, BiConsumer<TSCNode, TSCSourceFileContext> callback) {
-        parseSourceTexts(Collections.singletonMap(Paths.get(filename), sourceText), callback);
+        parseSourceTexts(Collections.singletonMap(Path.of(filename), sourceText), callback);
     }
 
     public void parseSourceTexts(Map<Path, String> sourceTexts, BiConsumer<TSCNode, TSCSourceFileContext> callback) {
@@ -168,7 +167,7 @@ public class TSCRuntime implements AutoCloseable {
 
                     V8ValueObject sourceFileV8 = (V8ValueObject) maybeSourceFileV8;
                     String sourceText = sourceFileV8.getPropertyString("text");
-                    Path filePath = Paths.get(filePathV8.getValue());
+                    Path filePath = Path.of(filePathV8.getValue());
                     try (TSCSourceFileContext sourceFileContext = new TSCSourceFileContext(programContext, sourceText, filePath)) {
                         TSCNode node = programContext.tscNode(sourceFileV8);
                         callback.accept(node, sourceFileContext);

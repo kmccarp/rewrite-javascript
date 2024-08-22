@@ -22,7 +22,6 @@ import org.openrewrite.javascript.internal.tsc.generated.TSCObjectFlag;
 import org.openrewrite.javascript.internal.tsc.generated.TSCTypeFlag;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -110,9 +109,9 @@ public class V8InteropTests {
     public void testTypeIdentityInDifferentFiles() {
         try (TSCRuntime runtime = TSCRuntime.init()) {
             Map<Path, String> sources = new HashMap<>();
-            sources.put(Paths.get("a.ts"), "export class Foo {}");
-            sources.put(Paths.get("b.ts"), "import {Foo} from './a'; const x = new Foo();");
-            sources.put(Paths.get("c.ts"), "import {Foo} from './a'; const x = new Foo();");
+            sources.put(Path.of("a.ts"), "export class Foo {}");
+            sources.put(Path.of("b.ts"), "import {Foo} from './a'; const x = new Foo();");
+            sources.put(Path.of("c.ts"), "import {Foo} from './a'; const x = new Foo();");
             AtomicReference<TSCType> inOtherFile = new AtomicReference<>();
             AtomicBoolean checked = new AtomicBoolean();
             runtime.parseSourceTexts(sources, (root, ctx) -> {
@@ -376,7 +375,7 @@ public class V8InteropTests {
               assertEquals(
                 new TSCProgramContext.CompilerBridgeSourceInfo(
                   TSCProgramContext.CompilerBridgeSourceKind.ApplicationCode,
-                  Paths.get("example.ts")
+                  Path.of("example.ts")
                 ),
                 Foo.getSourceFile().getCompilerBridgeSourceInfo()
               );

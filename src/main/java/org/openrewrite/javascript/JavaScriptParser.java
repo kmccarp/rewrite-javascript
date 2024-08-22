@@ -36,7 +36,6 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -73,7 +72,7 @@ public class JavaScriptParser implements Parser {
     public Stream<SourceFile> parse(String... sources) {
         List<Input> inputs = new ArrayList<>(sources.length);
         for (int i = 0; i < sources.length; i++) {
-            Path path = Paths.get("f" + i + ".ts");
+            Path path = Path.of("f" + i + ".ts");
             int j = i;
             inputs.add(new Input(
                     path, null,
